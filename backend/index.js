@@ -1,19 +1,33 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const customerRoutes = require("./routes/customerRoutes/customerRoutes");
 
-//DB configuration
-const db = require("./config/keys").MongoURI;
+// Load environment variables (e.g., for MongoDB URI)
+require("dotenv").config();
 
 const app = express();
 
-mongoose.connect(db, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+app.use(express.json());
+
+const db = process.env.MONGO_URI;
+
+mongoose
+  .connect(db, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("MongoDB connected successfully"))
+  .catch((err) => console.error("MongoDB connection error:", err));
+
+app.use("/api/customers", customerRoutes); // Mount customer routes
 
 app.get("/", (req, res) => {
-  res.send("connected successfully");
+  res.send("Server is running and connected successfully!");
 });
 
-app.listen(4000);
-console.log("Application is running is port 4000 or http://localhost:4000");
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => {
+  console.log(
+    `Application is running on port ${PORT} or http://localhost:${PORT}`
+  );
+});
