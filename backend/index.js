@@ -19,7 +19,7 @@ mongoose
   .then(() => console.log("MongoDB connected successfully"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
-app.use("/api/customers", customerRoutes); // Mount customer routes
+app.use("/api/customers", customerRoutes);
 
 app.get("/", (req, res) => {
   res.send("Server is running and connected successfully!");
